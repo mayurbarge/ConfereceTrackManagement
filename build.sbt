@@ -13,8 +13,10 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 
 libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-core" % scalazVersion,
-  //  "org.scalaz" %% "scalaz-effect" % scalazVersion,
-  //"org.scalaz" %% "scalaz-typelevel" % scalazVersion,
+  "org.scalaz" %% "scalaz-effect" % scalazVersion,
+  //"org.scalaz" % "scalaz-ioeffect_2.12" % "2.10.1",
+
+//"org.scalaz" %% "scalaz-typelevel" % scalazVersion,
   "org.scalaz" %% "scalaz-scalacheck-binding" % scalazVersion % "test"
 )
 
