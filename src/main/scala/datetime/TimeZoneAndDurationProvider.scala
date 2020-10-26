@@ -9,7 +9,7 @@ import scalaz.{Failure, Success, Validation}
 object TimeZoneAndDurationProvider {
   private val date = new Date()
   private val inst = date.toInstant()
-  val initial: ZonedDateTime = inst.atZone(ZoneId.systemDefault())
+  val morning9Time: ZonedDateTime = inst.atZone(ZoneId.systemDefault())
     .`with`(ChronoField.HOUR_OF_DAY, 0)
     .`with`(ChronoField.MINUTE_OF_DAY, 0)
     .`with`(ChronoField.SECOND_OF_DAY, 0)
@@ -18,7 +18,7 @@ object TimeZoneAndDurationProvider {
 
   def getTimeAt(minutesSinceStart: Int): Validation[String, ZonedDateTime] = {
     if(0 <= minutesSinceStart)
-      Success(initial.plus(Duration.ofMinutes(minutesSinceStart)))
+      Success(morning9Time.plus(Duration.ofMinutes(minutesSinceStart)))
     else
       Failure("Invalid minutes !")
   }

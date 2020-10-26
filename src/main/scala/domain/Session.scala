@@ -17,12 +17,12 @@ case class AfternoonSession(events: List[Event]) extends Session {
 }
 
 object Session {
-  import TimeZoneAndDurationProvider.initial._
+  import TimeZoneAndDurationProvider.morning9Time._
 
   def validatePair(morningAndAfteroonSession: (MorningSession, AfternoonSession)): Result[(_ <: MorningSession, _ <: AfternoonSession)] = {
     val (morningSession, afternoonSession) = morningAndAfteroonSession
-    val validatedMorningSession: Result[MorningSession] = validateMorningSession(morningSession, TimeZoneAndDurationProvider.initial)
-    val validatedAfternoonSession: Result[AfternoonSession] = validateAfternoonSession(afternoonSession, TimeZoneAndDurationProvider.initial.plusHours(4))
+    val validatedMorningSession: Result[MorningSession] = validateMorningSession(morningSession, TimeZoneAndDurationProvider.morning9Time)
+    val validatedAfternoonSession: Result[AfternoonSession] = validateAfternoonSession(afternoonSession, TimeZoneAndDurationProvider.morning9Time.plusHours(4))
     (validatedMorningSession |@| validatedAfternoonSession).tupled
   }
 
