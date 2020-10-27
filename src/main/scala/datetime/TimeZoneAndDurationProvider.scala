@@ -15,12 +15,5 @@ object TimeZoneAndDurationProvider {
     .`with`(ChronoField.SECOND_OF_DAY, 0)
     .`with`(ChronoField.MILLI_OF_SECOND, 0)
     .plus(Duration.ofHours(9))
-
-  def getTimeAt(minutesSinceStart: Int): Validation[String, ZonedDateTime] = {
-    if(0 <= minutesSinceStart)
-      Success(morning9Time.plus(Duration.ofMinutes(minutesSinceStart)))
-    else
-      Failure("Invalid minutes !")
-  }
 }
 

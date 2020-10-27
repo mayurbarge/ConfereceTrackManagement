@@ -8,15 +8,5 @@ class TimeZoneAndDurationProviderTest extends org.scalatest.FunSpec with Matcher
       TimeZoneAndDurationProvider.morning9Time.getHour shouldBe 9
       TimeZoneAndDurationProvider.morning9Time.getMinute shouldBe 0
     }
-
-    it("should give time after 11:11 AM time when 71 minutes are added to the initial time") {
-      val expectedTime = TimeZoneAndDurationProvider.getTimeAt(71)
-      expectedTime.toDisjunction.getOrElse(TimeZoneAndDurationProvider.morning9Time).getHour shouldBe 10
-      expectedTime.toDisjunction.getOrElse(TimeZoneAndDurationProvider.morning9Time).getMinute shouldBe 11
-    }
-
-    it("should give time after 11 are added to the initial time") {
-      TimeZoneAndDurationProvider.getTimeAt(Integer.MIN_VALUE).toDisjunction.isLeft shouldBe true
-    }
   }
 }

@@ -16,7 +16,13 @@ object ScheduledEvent {
     }
   }
 
-  def toString(event: ScheduledEvent) = {
+  private def toString(event: ScheduledEvent) = {
     s""" ${TimeZoneAndDurationProvider.morning9Time.plusMinutes(event.slot.beginAtOffset)} ${event.eventName}  ${event.slot.duration.getOrElse(0)} min"""
+  }
+
+  def printSchedules(schedules: List[List[ScheduledEvent]]) = {
+    schedules.map(schedule => {
+      "\n Track \n" + schedule.map(toString).mkString("\n")
+    }).mkString(" ")
   }
 }

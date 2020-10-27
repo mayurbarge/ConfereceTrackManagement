@@ -19,7 +19,7 @@ class SchedulerTest extends FunSpec with Matchers {
         ScheduledEvent("T5",Slot(420,Some(90))),
         ScheduledEvent("Networking",Slot(510,Some(0)))))
 
-      Scheduler.schedule(List(track)) should contain theSameElementsAs expectedEventSchedule
+      Scheduler.schedule(track) should contain theSameElementsAs expectedEventSchedule
     }
   }
 

@@ -1,6 +1,11 @@
 package io
 
 import scalaz.effect.IO
+import scalaz._, Scalaz._, effect._, IO._
+import scalaz._
+import Scalaz._
+import effect._
+import IO._
 
 object Reader {
   def getTokensFromFile(filePath: String) = {
@@ -17,6 +22,14 @@ object Reader {
     } yield {
       (tokens.group(1), tokens.group(2))
     }
+  }
+}
+
+object Writer {
+  def write(data: String) = {
+      for {
+        _ <- putStrLn(data)
+      } yield ()
   }
 }
 

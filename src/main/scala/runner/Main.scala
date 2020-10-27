@@ -2,6 +2,8 @@ package runner
 
 import domain._
 import io.Reader
+import io.Writer
+import runner.MainApp.validatedSessions
 import scalaz.Scalaz._
 import scalaz._
 import schedular.{ScheduledEvent, Scheduler, SchedulingStrategy}
@@ -11,19 +13,38 @@ import validations.Validator.Result
 object MainApp extends App {
   val i = System.getProperty("user.dir")
   val inputFilePath = "./input.txt"
-  val validatedTalks: Result[List[Talk]] = Reader.getTokensFromFile(inputFilePath).map(e => Talk.validate(e._1,e._2)).sequence
+  val validatedTalks: Result[List[Talk]] = readTalksFromFile
+  val validatedSessions = scheduleAndValidateSessions
 
-  for {
-    validTalk <- validatedTalks
-    validatedSessions = SchedulingStrategy.knapsackScheduling.split(validTalk).map(Session.validatePair).sequence
-  } yield {
-    val tracks = validatedSessions.map(_.map(e => Track(e._1, e._2)))
-    val schedules: Validation[NonEmptyList[String], List[List[ScheduledEvent]]] = tracks.map(Scheduler.schedule)
+  def readTalksFromFile = {
+    Reader.getTokensFromFile(inputFilePath).map(e => Talk.validate(e._1, e._2)).sequence
+  }
 
-    schedules.map(allTracks => {
-      println(allTracks.flatten)
-      allTracks.flatten.map(e => println(ScheduledEvent.toString(e)))
-    })
+  def scheduleAndValidateSessions = {
+    for {
+      validTalk <- validatedTalks
+      validatedSessions = SchedulingStrategy.knapsackScheduling.split(validTalk).map(Session.validatePair).sequence
+    } yield {
+      validatedSessions
+    }
+  }
+
+  def processSessions(validSessions: List[(_ <: MorningSession, _ <: AfternoonSession)]): String = {
+    val schedules = validSessions.map(e => Track(e._1, e._2)).map(Scheduler.schedule)
+    ScheduledEvent.printSchedules(schedules)
+  }
+
+  def getSchedule: Validation[NonEmptyList[String], String] = {
+      validatedSessions.map(_ match {
+        case Success(validSessions) => processSessions(validSessions)
+        case Failure(message) => message.toList.mkString("\n")
+      })
+  }
+
+
+  getSchedule match {
+    case Success(output) => Writer.write(output).unsafePerformIO()
+    case Failure(message) => Writer.write(message.toList.mkString("\n"))
   }
 }
 
